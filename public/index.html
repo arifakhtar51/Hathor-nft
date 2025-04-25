@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NFT Minting Platform</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      color: #333;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .header p {
+      color: #666;
+      font-size: 1.2em;
+    }
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .mint-section, .profile-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="file"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .error { 
+      color: #d32f2f; 
+      background-color: #ffebee;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .success { 
+      color: #2e7d32; 
+      background-color: #e8f5e9;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .processing { 
+      color: #1976d2; 
+      background-color: #e3f2fd;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .nft-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .nft-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nft-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .nft-info {
+      padding: 15px;
+    }
+    .nft-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .nft-description {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+    }
+    .nft-links {
+      display: flex;
+      gap: 10px;
+    }
+    .nft-links a {
+      color: #1976d2;
+      text-decoration: none;
+      font-size: 0.9em;
+    }
+    .nft-links a:hover {
+      text-decoration: underline;
+    }
+    .guide-section {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+    
+    .guide-steps {
+      counter-reset: step-counter;
+      list-style: none;
+      padding: 0;
+    }
+    
+    .guide-step {
+      position: relative;
+      padding: 20px 20px 20px 60px;
+      margin-bottom: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .guide-step::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .guide-step h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    
+    .guide-step p {
+      margin: 0;
+      color: #666;
+    }
+    
+    .copy-button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    .copy-button:hover {
+      background: #1565c0;
+    }
+    
+    .success-message {
+      color: #2e7d32;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>NFT Minting Platform</h1>
+      <p>Create and manage your NFTs with ease</p>
+    </div>
+
+    <div class="main-content">
+      <div class="mint-section">
+        <h2>Mint New NFT</h2>
+        <form id="mintForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="name">NFT Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter NFT name" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Enter NFT description" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="seed">Seed Phrase</label>
+            <input type="text" id="seed" name="seed" placeholder="Enter your seed phrase" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="image">NFT Image</label>
+            <input type="file" id="image" name="image" accept="image/*" required />
+          </div>
+          
+          <button type="submit">Upload to IPFS</button>
+        </form>
+        <div id="result"></div>
+      </div>
+
+      <div class="profile-section">
+        <h2>Your NFTs</h2>
+        <div id="nftGrid" class="nft-grid">
+          <!-- NFTs will be displayed here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2>Manual Minting Guide</h2>
+      <p>After uploading your NFT to IPFS, follow these steps to complete the minting process:</p>
+      
+      <ol class="guide-steps">
+        <li class="guide-step">
+          <h3>Prepare Your Wallet</h3>
+          <p>Make sure you have a Hathor wallet with some HTR tokens for gas fees.</p>
+        </li>
+        
+        <li class="guide-step">
+          <h3>Access Hathor Wallet</h3>
+          <p>Open your Hathor wallet and navigate to the "Create Token" section.</p>
+        </li>
+        
+        <li class="guide-step">
+          <h3>Enter Token Details</h3>
+          <p>Fill in the following details:</p>
+          <ul>
+            <li>Name: Use the same name as your NFT</li>
+            <li>Symbol: Create a unique symbol (e.g., NFT001)</li>
+            <li>Amount: 1 (for NFT)</li>
+            <li>NFT Data: Paste the IPFS metadata URL</li>
+          </ul>
+        </li>
+        
+        <li class="guide-step">
+          <h3>Complete Minting</h3>
+          <p>Review all details and confirm the transaction. Wait for the transaction to be confirmed on the blockchain.</p>
+        </li>
+        
+        <li class="guide-step">
+          <h3>Verify Your NFT</h3>
+          <p>After minting, you can verify your NFT on the Hathor Explorer using the transaction hash.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:3001';
+    const form = document.getElementById('mintForm');
+    const resultDiv = document.getElementById('result');
+    const nftGrid = document.getElementById('nftGrid');
+
+    // Load existing NFTs
+    async function loadNFTs() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/nfts`);
+        if (!response.ok) {
+          throw new Error('Failed to load NFTs');
+        }
+        const nfts = await response.json();
+        displayNFTs(nfts);
+      } catch (error) {
+        console.error('Error loading NFTs:', error);
+        nftGrid.innerHTML = '<div class="error">Error loading NFTs. Please try again later.</div>';
+      }
+    }
+
+    // Display NFTs in the grid
+    function displayNFTs(nfts) {
+      if (!nfts || nfts.length === 0) {
+        nftGrid.innerHTML = '<div class="info">No NFTs minted yet. Start by minting your first NFT!</div>';
+        return;
+      }
+
+      nftGrid.innerHTML = nfts.map(nft => `
+        <div class="nft-card">
+          <img src="${nft.imageURL}" alt="${nft.name}" class="nft-image" onerror="this.src='https://via.placeholder.com/300x200?text=Image+Not+Found'">
+          <div class="nft-info">
+            <div class="nft-title">${nft.name}</div>
+            <div class="nft-description">${nft.description}</div>
+            <div class="nft-links">
+              <a href="${nft.imageURL}" target="_blank">View Image</a>
+              <a href="${nft.metadataURL}" target="_blank">View Metadata</a>
+            </div>
+            <button class="copy-button" onclick="copyToClipboard('${nft.metadataURL}')">Copy Metadata URL</button>
+            <div class="success-message">Copied to clipboard!</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Copy to clipboard function
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const successMessage = document.querySelector('.success-message');
+        successMessage.style.display = 'block';
+        setTimeout(() => {
+          successMessage.style.display = 'none';
+        }, 2000);
+      });
+    }
+
+    // Load NFTs when page loads
+    loadNFTs();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resultDiv.innerHTML = 'Processing...';
+      resultDiv.className = 'processing';
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch(`${API_BASE_URL}/api/mint`, { 
+          method: 'POST', 
+          body: data 
+        });
+        
+        let json;
+        try {
+          json = await res.json();
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+          throw new Error('Server returned invalid response');
+        }
+        
+        if (!res.ok) {
+          throw new Error(json.message || 'Server error');
+        }
+
+        resultDiv.innerHTML = `
+          <div class="success">
+            <p>${json.message}</p>
+            <p>Your NFT has been uploaded to IPFS. Follow the manual minting guide below to complete the process.</p>
+            <p>Metadata URL: <a href="${json.nft.metadataURL}" target="_blank">${json.nft.metadataURL}</a></p>
+            <button class="copy-button" onclick="copyToClipboard('${json.nft.metadataURL}')">Copy Metadata URL</button>
+          </div>
+        `;
+        
+        // Reload NFTs after successful minting
+        await loadNFTs();
+        
+        // Clear form
+        form.reset();
+      } catch (error) {
+        resultDiv.textContent = `Error: ${error.message}`;
+        resultDiv.className = 'error';
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html> 
