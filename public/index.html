@@ -293,7 +293,11 @@
   </div>
 
   <script>
-    const API_BASE_URL = 'http://localhost:3001';
+    // Update API base URL to use Netlify functions
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : '/.netlify/functions';
+
     const form = document.getElementById('mintForm');
     const resultDiv = document.getElementById('result');
     const nftGrid = document.getElementById('nftGrid');
@@ -301,7 +305,7 @@
     // Load existing NFTs
     async function loadNFTs() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/nfts`);
+        const response = await fetch(`${API_BASE_URL}/mint`);
         if (!response.ok) {
           throw new Error('Failed to load NFTs');
         }
@@ -358,7 +362,7 @@
 
       try {
         const data = new FormData(form);
-        const res = await fetch(`${API_BASE_URL}/api/mint`, { 
+        const res = await fetch(`${API_BASE_URL}/mint`, { 
           method: 'POST', 
           body: data 
         });
