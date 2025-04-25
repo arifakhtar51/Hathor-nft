@@ -1,0 +1,131 @@
+.mint-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mint-form {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+button {
+  background: #4CAF50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc3545;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.success-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.success-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.success-header h3 {
+  color: #28a745;
+  margin: 0;
+  font-size: 24px;
+}
+
+.success-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.minted-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #28a745;
+}
+
+.success-details {
+  flex: 1;
+}
+
+.success-details p {
+  margin: 10px 0;
+  color: #333;
+}
+
+.hash {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.ipfs-link {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.ipfs-link:hover {
+  background: #0056b3;
+} 
